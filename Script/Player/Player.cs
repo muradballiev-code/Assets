@@ -160,8 +160,8 @@ public class Player : MonoBehaviour
     //Create PlayerController method to move Player
     public void PlayerController()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
         _playerAnim.SetFloat("PlayerTurn", horizontal);
 

@@ -67,7 +67,6 @@ public class Enemy : MonoBehaviour
     private ExplosionSound _explosionSound;
 
     private EnemyLaserBeam _enemyBeam;
-    private bool _laserBeamActive = false;
     private Coroutine _laserRoutine;
 
     private SpawnManager _spawnManager;
@@ -315,16 +314,16 @@ public class Enemy : MonoBehaviour
     public void EnemyLaserFire()
     {
         if (_isPlayerAlive == false)
-            return;
+        return;
 
-        if (transform.position.y >= 7f)
-            return;
+        if (gameObject == null)
+        return;
 
-        if (transform.position.y <= -4f)
-            return;
+        if (transform.position.y >= 7f || transform.position.y <= -4f)
+        return;
 
         if (_aggressiveEnemy == true)
-            return;
+        return;
 
         if (Time.time > _enemyCanFire)
         {
@@ -358,14 +357,17 @@ public class Enemy : MonoBehaviour
 
     public void EnemyLaserBeam()
     {
-        if (transform.position.y >= 7f)
-            return;
+        if (_isPlayerAlive == false)
+        return;
 
-        if (transform.position.y <= -4f)
-            return;
+        if (gameObject == null)
+        return;
+
+        if (transform.position.y >= 7f || transform.position.y <= -4f)
+        return;
 
         if (_aggressiveEnemy == true)
-            return;
+        return;
 
         if (_playerBehind == true)
         {

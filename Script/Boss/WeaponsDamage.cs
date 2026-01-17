@@ -17,12 +17,6 @@ public class WeaponsDamage : MonoBehaviour
     private int _rightTurret = 7;
     [SerializeField]
     private int _leftTurret = 7;
-    [SerializeField]
-    private int _countWeapons = 5;
-    [SerializeField]
-    private int _bossLiveLevel;
-    private int _bossLiveSlide = 1;
-
 
     [SerializeField]
     private GameObject _weaponsExplosionPrefab;
