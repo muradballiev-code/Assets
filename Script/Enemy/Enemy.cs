@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private int _enemyID;
     private int _enemyMoveType;
     private int _enemyFireType;
+    private bool _isEnemyAlive = false;
     
     private float _enemySpeed;
     private float _enemyCanFire = -1f;
@@ -138,12 +139,18 @@ public class Enemy : MonoBehaviour
         {
             case 0:
                 EnemyMovement();
-                EnemyLaserFire();
+                if (_isEnemyAlive == false)
+                {
+                    EnemyLaserFire();
+                }
                 PlayerBehindEnemy();
             break;
             case 1:
                 SideToSideEnemyMovement();
-                EnemyLaserFire();
+                if (_isEnemyAlive == false)
+                {
+                    EnemyLaserFire();
+                }
                 PlayerBehindEnemy();
                 EnemyShield();
                 BoostDetected();
@@ -151,7 +158,10 @@ public class Enemy : MonoBehaviour
             break;
             case 2:
                 ZigZagEnemyMovement();
-                EnemyLaserBeam();
+                if (_isEnemyAlive == false)
+                {
+                    EnemyLaserBeam();
+                }
                 EnemyShield();
                 EnemyAggression();
                 EnemyAvoidShot();
@@ -192,19 +202,24 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        switch (_enemyFireType)
+        if (_isEnemyAlive == false)
         {
-            case 0:
-                EnemyLaserFire();
+            switch (_enemyFireType)
+            {
+                case 0:
+                    EnemyLaserFire();
                 break;
-            case 1:
-                EnemyLaserBeam();
+                case 1:
+                    EnemyLaserBeam();
                 break;
 
-            default:
-                EnemyLaserFire();
+                default:
+                    EnemyLaserFire();
                 break;
+            }
         }
+
+        
     }
 
     //Enemy standart move
@@ -316,9 +331,6 @@ public class Enemy : MonoBehaviour
         if (_isPlayerAlive == false)
         return;
 
-        if (gameObject == null)
-        return;
-
         if (transform.position.y >= 7f || transform.position.y <= -4f)
         return;
 
@@ -358,9 +370,6 @@ public class Enemy : MonoBehaviour
     public void EnemyLaserBeam()
     {
         if (_isPlayerAlive == false)
-        return;
-
-        if (gameObject == null)
         return;
 
         if (transform.position.y >= 7f || transform.position.y <= -4f)
@@ -607,6 +616,7 @@ public class Enemy : MonoBehaviour
         _explosionSound.ExplosionAudio();
         //_spawnManager.EnemyKilled();
         Destroy(GetComponent<Collider2D>());
+        _isEnemyAlive = true;
         Destroy(this.gameObject, _waitTime);
     }
 
@@ -629,6 +639,7 @@ public class Enemy : MonoBehaviour
             _explosionSound.ExplosionAudio();
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
+            _isEnemyAlive = true;
             Destroy(this.gameObject, _waitTime);
         }
 
@@ -655,6 +666,7 @@ public class Enemy : MonoBehaviour
             _explosionSound.ExplosionAudio();
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
+            _isEnemyAlive = true;
             Destroy(this.gameObject, _waitTime);
             Destroy(other.gameObject);
         }
@@ -673,6 +685,7 @@ public class Enemy : MonoBehaviour
             _explosionSound.ExplosionAudio();
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
+            _isEnemyAlive = true;
             Destroy(this.gameObject, _waitTime);
             Destroy(other.gameObject);
         }
