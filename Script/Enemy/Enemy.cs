@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     
     private float _enemySpeed;
     private float _enemyCanFire = -1f;
-    private float _enemyFireRate = 1.0f;
+    private float _enemyFireRate = 2f;
     private float _enemyCanFireBoost = -1f;
     private float _enemyFireBoostRate = 0.5f;
     private float _waitTime = 1.5f;
@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
     {
         _enemyShield.SetActive(false);
         _enemyShieldRandom = Random.Range(1, 5);
-        _enemySpeed = Random.Range(3f, 4f);
+        _enemySpeed = Random.Range(2.5f, 3.5f);
 
         //Get Animator component from Enemy object
         _enemyAnim = GetComponent<Animator>();
@@ -238,7 +238,6 @@ public class Enemy : MonoBehaviour
             }
 
             float randomPosX = Random.Range(-8f, 8f);
-
             //Set new random position by X for Enemy for moving
             transform.position = new Vector3(randomPosX, 11f, 0);
         }
