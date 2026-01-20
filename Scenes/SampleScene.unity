@@ -1629,8 +1629,6 @@ MonoBehaviour:
   _leftFighterCanonHealth: 5
   _rightTurret: 7
   _leftTurret: 7
-  _countWeapons: 5
-  _bossLiveLevel: 0
   _weaponsExplosionPrefab: {fileID: 8948349251028085990, guid: cd9d652d73892d541955a0f3293de6fc, type: 3}
   _explosionSound: {fileID: 599389474}
 --- !u!1 &618957182
@@ -2278,8 +2276,6 @@ MonoBehaviour:
   _leftFighterCanonHealth: 5
   _rightTurret: 7
   _leftTurret: 7
-  _countWeapons: 5
-  _bossLiveLevel: 0
   _weaponsExplosionPrefab: {fileID: 8948349251028085990, guid: cd9d652d73892d541955a0f3293de6fc, type: 3}
   _explosionSound: {fileID: 599389474}
 --- !u!1 &963194225
@@ -2703,8 +2699,6 @@ MonoBehaviour:
   _leftFighterCanonHealth: 5
   _rightTurret: 7
   _leftTurret: 7
-  _countWeapons: 5
-  _bossLiveLevel: 0
   _weaponsExplosionPrefab: {fileID: 8948349251028085990, guid: cd9d652d73892d541955a0f3293de6fc, type: 3}
   _explosionSound: {fileID: 599389474}
 --- !u!1 &1123774762
@@ -5392,8 +5386,6 @@ MonoBehaviour:
   _leftFighterCanonHealth: 5
   _rightTurret: 7
   _leftTurret: 7
-  _countWeapons: 5
-  _bossLiveLevel: 0
   _weaponsExplosionPrefab: {fileID: 8948349251028085990, guid: cd9d652d73892d541955a0f3293de6fc, type: 3}
   _explosionSound: {fileID: 599389474}
 --- !u!60 &8206517484292102945
@@ -5534,8 +5526,6 @@ MonoBehaviour:
   _leftFighterCanonHealth: 5
   _rightTurret: 7
   _leftTurret: 7
-  _countWeapons: 5
-  _bossLiveLevel: 0
   _weaponsExplosionPrefab: {fileID: 8948349251028085990, guid: cd9d652d73892d541955a0f3293de6fc, type: 3}
   _explosionSound: {fileID: 599389474}
 --- !u!4 &8544808876750882065

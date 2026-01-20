@@ -61,7 +61,6 @@ public class SpawnManager : MonoBehaviour
         if (waveNum <= waveMaxNum)
         {
             _stopSpawning = false;
-            killedEnemy = 0;
             enemyMaxNum = enemyNum;
 
             switch (waveNum)
@@ -237,6 +236,7 @@ public class SpawnManager : MonoBehaviour
             _stopSpawning = true;
             waveNum++;
             enemyNum += 2;
+            killedEnemy = 0;
             _uiManager.WaveDiplsayText(waveNum);
         }
     }

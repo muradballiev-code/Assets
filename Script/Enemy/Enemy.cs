@@ -167,7 +167,6 @@ public class Enemy : MonoBehaviour
                 EnemyAvoidShot();
                 BoostDetected();
                 PlayerBehindEnemy();
-                Debug.Log(_enemyID);
             break;
             case 3:
                 EnemyMovementFire();
@@ -304,7 +303,8 @@ public class Enemy : MonoBehaviour
         //Move Enemy down
         transform.Translate(Vector3.down * Time.deltaTime);
 
-        transform.position = new Vector3(newPosX, transform.position.y, 0);
+        float borderX = Mathf.Clamp(newPosX, -9f, 9f);
+        transform.position = new Vector3(borderX, transform.position.y, 0);
 
         //Check Enemy position by X coordinate
         if (transform.position.y <= -7.5f)
@@ -316,7 +316,7 @@ public class Enemy : MonoBehaviour
             }
 
             //Set new random position by X for Enemy for moving
-            float randomPosX = Random.Range(-8f, 8f);
+            float randomPosX = Random.Range(-7f, 7f);
             transform.position = new Vector3(randomPosX, 11f, 0);
 
             _movingstartPosition = Random.Range(-8f, 8f);
@@ -401,7 +401,6 @@ public class Enemy : MonoBehaviour
             }
         }
 
-
         if (_laserRoutine == null)
         {
             _laserRoutine = StartCoroutine(LaserBeamCoroutine());
@@ -437,6 +436,9 @@ public class Enemy : MonoBehaviour
     //Check Distance between Player and Enemy to get agression and Ram Player
     public void EnemyAggression()
     {
+        if (_isPlayerAlive == false)
+        return;
+
         float _distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
 
         if (_distanceToPlayer < enemyRammingDist)
@@ -452,6 +454,8 @@ public class Enemy : MonoBehaviour
     //Ram Player
     public void RamPlayer()
     {
+        if (_isPlayerAlive == false)
+        return;
         transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _enemySpeed * 2f * Time.deltaTime);
     }
 
@@ -478,8 +482,6 @@ public class Enemy : MonoBehaviour
 
                 if (Time.time > _enemyCanFireBoost)
                 {
-                    Debug.Log("asdsadasdasd");
-
                     _enemyCanFireBoost = _enemyFireBoostRate + Time.time;
 
                     Vector3 _laserPosition = transform.position;
@@ -514,8 +516,6 @@ public class Enemy : MonoBehaviour
     //Avoid Shot By Enemy
     private void EnemyAvoidShot()
     {
-        Debug.Log("dfssfsdfsd");
-
         LayerMask _laserLayer = LayerMask.GetMask("Laser");
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2.5f, _laserLayer);
@@ -610,10 +610,10 @@ public class Enemy : MonoBehaviour
 
     IEnumerator EnemyDestoyByGranadeRoutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.5f);
         _enemyAnim.SetTrigger("OnEnemyDeath");
         _explosionSound.ExplosionAudio();
-        //_spawnManager.EnemyKilled();
+        _spawnManager.EnemyKilled();
         Destroy(GetComponent<Collider2D>());
         _isEnemyAlive = true;
         Destroy(this.gameObject, _waitTime);
@@ -639,11 +639,14 @@ public class Enemy : MonoBehaviour
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
             _isEnemyAlive = true;
+            _enemyBeam.gameObject.SetActive(false);
             Destroy(this.gameObject, _waitTime);
         }
 
         if (other.tag == "Laser")
         {
+            Debug.Log("sdfsfdsf");
+
             Laser laser = other.GetComponent<Laser>();
             if (laser == null)
             return;
@@ -666,6 +669,7 @@ public class Enemy : MonoBehaviour
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
             _isEnemyAlive = true;
+            _enemyBeam.gameObject.SetActive(false);
             Destroy(this.gameObject, _waitTime);
             Destroy(other.gameObject);
         }
@@ -685,6 +689,7 @@ public class Enemy : MonoBehaviour
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
             _isEnemyAlive = true;
+            _enemyBeam.gameObject.SetActive(false);
             Destroy(this.gameObject, _waitTime);
             Destroy(other.gameObject);
         }

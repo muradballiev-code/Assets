@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-    private int _waitTime = 3;
+    private float _waitTime = 2.5f;
     [SerializeField]
     private Animator _grenadeAnim;
 
