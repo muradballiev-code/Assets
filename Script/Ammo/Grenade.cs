@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-    private float _waitTime = 2.5f;
+    private float _waitTime = 2f;
     [SerializeField]
     private Animator _grenadeAnim;
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Enemy")
         {
@@ -24,6 +24,7 @@ public class Grenade : MonoBehaviour
         {
             yield return new WaitForSeconds(_waitTime);
             Destroy(this.gameObject);
+            Destroy(GetComponent<Collider2D>());
         }
     }
 }

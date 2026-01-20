@@ -610,7 +610,8 @@ public class Enemy : MonoBehaviour
 
     IEnumerator EnemyDestoyByGranadeRoutine()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2f);
+        _player.PlayerScore(_score);
         _enemyAnim.SetTrigger("OnEnemyDeath");
         _explosionSound.ExplosionAudio();
         _spawnManager.EnemyKilled();
