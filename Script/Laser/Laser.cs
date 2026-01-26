@@ -120,7 +120,7 @@ public class Laser : MonoBehaviour
 
             if (player != null)
             {
-                //player.PlayerHealthDamage();
+                player.PlayerHealthDamage();
 
                  //Check if GameObject has a parent. If YES
                 if (transform.parent != null)

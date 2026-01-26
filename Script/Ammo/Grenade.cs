@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-    private float _waitTime = 2f;
+    private float _waitTime = 1.8f;
     [SerializeField]
     private Animator _grenadeAnim;
 
@@ -13,7 +13,7 @@ public class Grenade : MonoBehaviour
         if (other.tag == "Enemy")
         {
             _grenadeAnim.SetTrigger("GrenadeTrigger");
-            other.gameObject.GetComponent<Enemy>().EnemyGranadeDestroy();
+            //other.gameObject.GetComponent<Enemy>().EnemyGranadeDestroy();
             StartCoroutine(BombExplosionRoutine());
         }
     }

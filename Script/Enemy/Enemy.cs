@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     private int _enemyMoveType;
     private int _enemyFireType;
     private bool _isEnemyAlive = false;
-    
+
     private float _enemySpeed;
     private float _enemyCanFire = -1f;
     private float _enemyFireRate = 2f;
@@ -144,7 +144,7 @@ public class Enemy : MonoBehaviour
                     EnemyLaserFire();
                 }
                 PlayerBehindEnemy();
-            break;
+                break;
             case 1:
                 SideToSideEnemyMovement();
                 if (_isEnemyAlive == false)
@@ -155,7 +155,7 @@ public class Enemy : MonoBehaviour
                 EnemyShield();
                 BoostDetected();
                 Debug.Log(_enemyID);
-            break;
+                break;
             case 2:
                 ZigZagEnemyMovement();
                 if (_isEnemyAlive == false)
@@ -167,7 +167,7 @@ public class Enemy : MonoBehaviour
                 EnemyAvoidShot();
                 BoostDetected();
                 PlayerBehindEnemy();
-            break;
+                break;
             case 3:
                 EnemyMovementFire();
                 EnemyShield();
@@ -175,10 +175,10 @@ public class Enemy : MonoBehaviour
                 EnemyAvoidShot();
                 BoostDetected();
                 PlayerBehindEnemy();
-            break;
+                break;
 
             default:
-            break;
+                break;
         }
     }
 
@@ -207,18 +207,18 @@ public class Enemy : MonoBehaviour
             {
                 case 0:
                     EnemyLaserFire();
-                break;
+                    break;
                 case 1:
                     EnemyLaserBeam();
-                break;
+                    break;
 
                 default:
                     EnemyLaserFire();
-                break;
+                    break;
             }
         }
 
-        
+
     }
 
     //Enemy standart move
@@ -328,13 +328,13 @@ public class Enemy : MonoBehaviour
     public void EnemyLaserFire()
     {
         if (_isPlayerAlive == false)
-        return;
+            return;
 
         if (transform.position.y >= 7f || transform.position.y <= -4f)
-        return;
+            return;
 
         if (_aggressiveEnemy == true)
-        return;
+            return;
 
         if (Time.time > _enemyCanFire)
         {
@@ -369,13 +369,13 @@ public class Enemy : MonoBehaviour
     public void EnemyLaserBeam()
     {
         if (_isPlayerAlive == false)
-        return;
+            return;
 
         if (transform.position.y >= 7f || transform.position.y <= -4f)
-        return;
+            return;
 
         if (_aggressiveEnemy == true)
-        return;
+            return;
 
         if (_playerBehind == true)
         {
@@ -401,9 +401,22 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        if (_laserRoutine == null)
+        if (_isEnemyAlive == false)
         {
-            _laserRoutine = StartCoroutine(LaserBeamCoroutine());
+            if (_laserRoutine == null)
+            {
+                _laserRoutine = StartCoroutine(LaserBeamCoroutine());
+            }
+        }
+        else if (_isEnemyAlive == true)
+        {
+            if (_laserRoutine != null)
+            {
+                StopCoroutine(_laserRoutine);
+                _laserRoutine = null;
+            }
+
+            _enemyBeam.gameObject.SetActive(false);
         }
     }
 
@@ -413,6 +426,9 @@ public class Enemy : MonoBehaviour
 
         while (_isPlayerAlive == true)
         {
+            if (_isEnemyAlive == true)
+                break;
+
             _enemyBeam.gameObject.SetActive(true);
 
             yield return new WaitForSeconds(1.5f);
@@ -421,6 +437,9 @@ public class Enemy : MonoBehaviour
 
             yield return new WaitForSeconds(1.5f);
         }
+
+        _enemyBeam.gameObject.SetActive(false);
+        _laserRoutine = null;
     }
 
     //Enemy Sheild Activate
@@ -437,7 +456,10 @@ public class Enemy : MonoBehaviour
     public void EnemyAggression()
     {
         if (_isPlayerAlive == false)
-        return;
+            return;
+
+        if (_isEnemyAlive == true)
+            return;
 
         float _distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
 
@@ -455,7 +477,10 @@ public class Enemy : MonoBehaviour
     public void RamPlayer()
     {
         if (_isPlayerAlive == false)
-        return;
+            return;
+        
+        if (_isEnemyAlive == true)
+            return;
         transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _enemySpeed * 2f * Time.deltaTime);
     }
 
@@ -463,7 +488,7 @@ public class Enemy : MonoBehaviour
     private void BoostDetected()
     {
         if (_isPlayerAlive == false)
-        return;
+            return;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, -transform.up, _checkRange, boostMask);
         if (hit.collider != null)
@@ -559,15 +584,15 @@ public class Enemy : MonoBehaviour
         if (_isAvoidShot)
         {
             //Set new position to move
-            transform.Translate(_moveDirection* _enemySpeed * Time.deltaTime * _avoidDistance);
+            transform.Translate(_moveDirection * _enemySpeed * Time.deltaTime * _avoidDistance);
             _avoidTimer -= Time.deltaTime;
 
             if (_avoidTimer <= 0f)
             {
-            _isAvoidShot = false;
+                _isAvoidShot = false;
             }
 
-             return;
+            return;
         }
         else
         {
@@ -585,10 +610,10 @@ public class Enemy : MonoBehaviour
     public void PlayerBehindEnemy()
     {
         if (_isPlayerAlive == false)
-        return;
+            return;
 
         if (transform.position.y <= -3f)
-        return;
+            return;
 
         Vector3 directionToPlayer = (_player.transform.position - transform.position).normalized;
         float dot = Vector3.Dot(directionToPlayer, -transform.up);
@@ -610,7 +635,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator EnemyDestoyByGranadeRoutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.8f);
         _player.PlayerScore(_score);
         _enemyAnim.SetTrigger("OnEnemyDeath");
         _explosionSound.ExplosionAudio();
@@ -640,20 +665,17 @@ public class Enemy : MonoBehaviour
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
             _isEnemyAlive = true;
-            _enemyBeam.gameObject.SetActive(false);
             Destroy(this.gameObject, _waitTime);
         }
 
         if (other.tag == "Laser")
         {
-            Debug.Log("sdfsfdsf");
-
             Laser laser = other.GetComponent<Laser>();
             if (laser == null)
-            return;
+                return;
             //Check if this Enemy Fire laser from Laser script
             if (laser.IsEnemyLaser())
-            return;
+                return;
 
             if (_isEnemyShieildActive == true)
             {
@@ -670,7 +692,6 @@ public class Enemy : MonoBehaviour
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
             _isEnemyAlive = true;
-            _enemyBeam.gameObject.SetActive(false);
             Destroy(this.gameObject, _waitTime);
             Destroy(other.gameObject);
         }
@@ -690,7 +711,6 @@ public class Enemy : MonoBehaviour
             _spawnManager.EnemyKilled();
             Destroy(GetComponent<Collider2D>());
             _isEnemyAlive = true;
-            _enemyBeam.gameObject.SetActive(false);
             Destroy(this.gameObject, _waitTime);
             Destroy(other.gameObject);
         }
