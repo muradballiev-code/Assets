@@ -7,12 +7,14 @@ using UnityEngine.Experimental.Video;
 public class Player : MonoBehaviour
 {
     [Header("Player Health")]
-    public int playerHealth = 3;
-    private int playerHealthMax = 3;
+    [SerializeField]
+    private int _playerHealth = 3;
+    private int _playerHealthMax = 3;
     private int _playerScore;
 
     [Header("Player Move Speed")]
-    public int playerSpeed = 8;
+    [SerializeField]
+    private int _playerSpeed = 8;
     private int _playerSpeedDefault = 8;
     [SerializeField]
     private int _playerSpeedMultiple = 2;
@@ -78,8 +80,8 @@ public class Player : MonoBehaviour
 
     [Header("PickUp Boost components")]
     [SerializeField]
-    private LayerMask powerUpLayer;
-    private float collectRange = 5f;
+    private LayerMask _powerUpLayer;
+    private float _collectRange = 5f;
 
     private Animator _playerAnim;
 
@@ -175,7 +177,7 @@ public class Player : MonoBehaviour
         }
 
         Vector3 direction = new Vector3(horizontal, vertical, 0).normalized;
-        transform.Translate(direction * playerSpeed * Time.deltaTime);
+        transform.Translate(direction * _playerSpeed * Time.deltaTime);
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.45f, 9.45f), Mathf.Clamp(transform.position.y, -3.8f, 5.7f), 0);
     }
@@ -267,19 +269,19 @@ public class Player : MonoBehaviour
             return;
         }
 
-        playerHealth--;
+        _playerHealth--;
 
-        _uiManager.UpdatePlayerLive(playerHealth);
+        _uiManager.UpdatePlayerLive(_playerHealth);
 
-        if (playerHealth == 2)
+        if (_playerHealth == 2)
         {
             _playerLeftEngineDamage.SetActive(true);
         }
-        else if (playerHealth == 1)
+        else if (_playerHealth == 1)
         {
             _playerRightEngineDamage.SetActive(true);
         }
-        else if (playerHealth < 1)
+        else if (_playerHealth < 1)
         {
             _spawnManager.StopSpawning();
             Instantiate(_playerExplosionPrefab, transform.position, Quaternion.identity);
@@ -291,11 +293,11 @@ public class Player : MonoBehaviour
     //Call method when Boss shot Laser Beam
     public void PlayerDeath()
     {
-        playerHealth = 0;
+        _playerHealth = 0;
         _spawnManager.StopSpawning();
         Instantiate(_playerExplosionPrefab, transform.position, Quaternion.identity);
         _explosionSound.ExplosionAudio();
-        _uiManager.UpdatePlayerLive(playerHealth);
+        _uiManager.UpdatePlayerLive(_playerHealth);
         Destroy(this.gameObject);
     }
 
@@ -304,7 +306,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Collider2D[] _powerUps = Physics2D.OverlapCircleAll(transform.position, collectRange, powerUpLayer);
+            Collider2D[] _powerUps = Physics2D.OverlapCircleAll(transform.position, _collectRange, _powerUpLayer);
 
             if (_powerUps.Length > 0)
             {
@@ -318,7 +320,7 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.C))
         {
-            Collider2D[] _powerUps = Physics2D.OverlapCircleAll(transform.position, collectRange, powerUpLayer);
+            Collider2D[] _powerUps = Physics2D.OverlapCircleAll(transform.position, _collectRange, _powerUpLayer);
 
             if (_powerUps.Length > 0)
             {
@@ -335,7 +337,7 @@ public class Player : MonoBehaviour
     {
         if (_isPlayerSpeedBoostActive == false)
         {
-            playerSpeed = _playerSpeedDefault * _playerSpeedMultiple;
+            _playerSpeed = _playerSpeedDefault * _playerSpeedMultiple;
             ThrusterSliderActivate();
         }
     }
@@ -344,7 +346,7 @@ public class Player : MonoBehaviour
     {
         if (_isPlayerSpeedBoostActive == false)
         {
-            playerSpeed = _playerSpeedDefault;
+            _playerSpeed = _playerSpeedDefault;
         }
     }
 
@@ -380,7 +382,7 @@ public class Player : MonoBehaviour
 
         if (_isPlayerSpeedBoostActive == false)
         {
-            playerSpeed *= _playerSpeedMultiple;
+            _playerSpeed *= _playerSpeedMultiple;
             _isPlayerSpeedBoostActive = true;
             StartCoroutine(SpeedBoostDeactivateRoutine());
         }
@@ -431,18 +433,18 @@ public class Player : MonoBehaviour
     {
         _isNegativeBoostActive = false;
 
-        if (playerSpeed < _playerSpeedDefault)
+        if (_playerSpeed < _playerSpeedDefault)
         {
-            playerSpeed = _playerSpeedDefault;
+            _playerSpeed = _playerSpeedDefault;
         }
 
-        if (playerHealth < playerHealthMax)
+        if (_playerHealth < _playerHealthMax)
         {
-            playerHealth = playerHealthMax;
+            _playerHealth = _playerHealthMax;
 
             _playerLeftEngineDamage.SetActive(false);
             _playerRightEngineDamage.SetActive(false);
-            _uiManager.UpdatePlayerLive(playerHealth);
+            _uiManager.UpdatePlayerLive(_playerHealth);
         }
     }
 
@@ -460,8 +462,8 @@ public class Player : MonoBehaviour
     public void NegativeEffects()
     {
         _laserShot = Mathf.Abs(_laserShot / 2);
-        playerHealth -= 2;
-        playerSpeed = _playerSpeedDefault / _playerSpeedMultiple;
+        _playerHealth -= 2;
+        _playerSpeed = _playerSpeedDefault / _playerSpeedMultiple;
 
         if (_isShieldActive == true)
         {
@@ -482,7 +484,7 @@ public class Player : MonoBehaviour
     IEnumerator SpeedBoostDeactivateRoutine()
     {
         yield return new WaitForSeconds(3.0f);
-        playerSpeed /= _playerSpeedMultiple;
+        _playerSpeed /= _playerSpeedMultiple;
         _isPlayerSpeedBoostActive = false;
     }
 

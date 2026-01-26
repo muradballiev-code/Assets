@@ -13,7 +13,7 @@ public class Grenade : MonoBehaviour
         if (other.tag == "Enemy")
         {
             _grenadeAnim.SetTrigger("GrenadeTrigger");
-            //other.gameObject.GetComponent<Enemy>().EnemyGranadeDestroy();
+            other.gameObject.GetComponent<Enemy>().EnemyGranadeDestroy();
             StartCoroutine(BombExplosionRoutine());
         }
     }
